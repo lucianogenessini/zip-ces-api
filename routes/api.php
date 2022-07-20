@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\API'], function ($router) {
-    Route::resource('zip-codes', 'App\Http\Controllers\API\ZipCodeController')->only('show');
+Route::group(['middleware' => 'api', 'namespace' => 'App\Http\Controllers\Api'], function ($router) {
+    Route::resource('zip-codes', 'ZipCodeController')->only('show');
 });
 
