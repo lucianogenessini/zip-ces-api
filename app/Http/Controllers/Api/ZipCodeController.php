@@ -18,8 +18,9 @@ class ZipCodeController extends Controller
             'municipality'
         ]);
 
-        return json_encode($zip_code);
+        return response()->json([
+            $zip_code
+        ]);
 
-        //TODO: respuesta en caso de error.
     }
 }
