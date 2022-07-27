@@ -14,6 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('zip_codes', function (Blueprint $table) {
+            $table->charset = 'ascii';
+            $table->collation = 'ascii_general_ci';
+            
             $table->bigIncrements('id');
             $table->string('zip_code')->nullable();
             $table->string('locality')->nullable();

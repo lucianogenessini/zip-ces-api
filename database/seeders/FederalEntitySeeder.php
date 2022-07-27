@@ -30,9 +30,11 @@ class FederalEntitySeeder extends Seeder
 
                 if ($federal_entity) continue;
 
+                $name = $this->stripAccents($value['d_estado']);
+
                 FederalEntity::create([
                     'key' => $value['c_estado'],
-                    'name' => mb_strtoupper($value['d_estado']),
+                    'name' => mb_strtoupper($name),
                     'code' => null
                 ]);
             }
@@ -41,5 +43,9 @@ class FederalEntitySeeder extends Seeder
         unset($xmlString);
         unset($xmlObject);
     
+    }
+
+    function stripAccents($str) {
+        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
     }
 }

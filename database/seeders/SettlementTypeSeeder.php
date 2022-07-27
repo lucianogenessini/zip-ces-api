@@ -25,18 +25,23 @@ class SettlementTypeSeeder extends Seeder
 
         foreach ($phpArray as $item){
             foreach ($item as $key=>$value){
+                $name = $this->stripAccents($value['d_tipo_asenta']);
                 
-                $settlement_type = SettlementType::where('name', $value['d_tipo_asenta'])->first();
+                $settlement_type = SettlementType::where('name', $name)->first();
                 
                 if ($settlement_type) continue;
 
                 SettlementType::create([
-                    'name' => $value['d_tipo_asenta']
+                    'name' => $name
                 ]);
             }
         }
         unset($phpArray);
         unset($xmlString);
         unset($xmlObject);
+    }
+
+    function stripAccents($str) {
+        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
     }
 }

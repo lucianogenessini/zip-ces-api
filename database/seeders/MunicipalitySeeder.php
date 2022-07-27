@@ -25,14 +25,15 @@ class MunicipalitySeeder extends Seeder
 
         foreach ($phpArray as $item){
             foreach ($item as $key=>$value){
+                $municipality_name = $this->stripAccents($value['D_mnpio']);
+                $municipality_name = mb_strtoupper($municipality_name);
+                $municipality = Municipality::where('key', $value['c_mnpio'])->where('name', $municipality_name)->first();
                 
-                $municipality = Municipality::where('key', $value['c_mnpio'])->where('name', $value['D_mnpio'])->first();
-
                 if ($municipality) continue;
 
                 Municipality::create([
                     'key' => $value['c_mnpio'],
-                    'name' => mb_strtoupper($value['D_mnpio']),
+                    'name' => $municipality_name
                 ]);
             }
         }
@@ -40,6 +41,10 @@ class MunicipalitySeeder extends Seeder
         unset($xmlString);
         unset($xmlObject);
     
+    }
+
+    function stripAccents($str) {
+        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
     }
     
 }

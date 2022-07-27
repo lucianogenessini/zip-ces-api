@@ -14,6 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('municipalities', function (Blueprint $table) {
+            $table->charset = 'ascii';
+            $table->collation = 'ascii_general_ci';
             $table->bigIncrements('id');
             $table->unsignedBigInteger('key')->nullable();
             $table->string('name')->nullable();

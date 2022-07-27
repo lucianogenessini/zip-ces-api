@@ -27,12 +27,17 @@ class ZipCodeSeeder extends Seeder
 
         foreach ($phpArray as $item){
             foreach ($item as $key=>$value){
-                $municipality = Municipality::where('key', $value['c_mnpio'])->where('name', $value['D_mnpio'])->first();
+                $municipality_name = $this->stripAccents($value['D_mnpio']);
+                $municipality_name = mb_strtoupper($municipality_name);
+
+                $municipality = Municipality::where('key', $value['c_mnpio'])->where('name', $municipality_name)->first();
                 $federal_entity = FederalEntity::where('key', $value['c_estado'])->first();
+
+                $locality = isset($value['d_ciudad']) ? $this->stripAccents($value['d_ciudad']) : "";
 
                 ZipCode::firstOrCreate([
                     'zip_code' => $value['d_codigo'],
-                    'locality' => isset($value['d_ciudad']) ? mb_strtoupper($value['d_ciudad']) : "",
+                    'locality' => isset($value['d_ciudad']) ? mb_strtoupper($locality) : "",
                     'municipality_id' => $municipality->id,
                     'federal_entity_id' => $federal_entity->id
                 ]);
@@ -42,5 +47,9 @@ class ZipCodeSeeder extends Seeder
         unset($phpArray);
         unset($xmlString);
         unset($xmlObject);
+    }
+
+    function stripAccents($str) {
+        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
     }
 }
